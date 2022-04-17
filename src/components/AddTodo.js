@@ -1,49 +1,62 @@
 import React from "react";
-import {View, Text, StyleSheet, TextInput, TouchableHighlight, Alert} from "react-native";
+import {View, StyleSheet, TextInput, Alert, Keyboard, Platform} from "react-native";
+import {AppButton} from "./ui/AppButton";
+import {AntDesign} from "@expo/vector-icons";
+import {THEME} from "../theme";
 
-export const AddTodo = ({ btnTitle, inputPlaceholder, onSubmit, errMessage }) => {
+export const AddTodo = ({btnTitle = 'Добавить', onOpenForm, inputPlaceholder, onSubmit, errMessage}) => {
     const [value, setValue] = React.useState('');
-    const pressHandler = () => {
+    const pressHandler = (kbhide = true) => {
         if (value.trim()) {
             if (onSubmit) {
-                onSubmit(value.trim());
+                onSubmit(value.trim(), '');
+                if (kbhide) {
+                    Keyboard.dismiss();
+                }
             } else {
                 console.log(value);
             }
             setValue('');
         } else {
-            Alert.alert("Ошибка в Todo App!", errMessage??"Неверно заполнено наименование задачи!");
+            Alert.alert("Ошибка в Todo App!", errMessage ?? "Неверно заполнено наименование задачи!");
         }
     }
     return (
-      <View style={styles.addBlock}>
-          <TextInput
-              style={styles.input}
-              onChangeText={value => setValue(value)}
-              value={value}
-              placeholder={inputPlaceholder??'Введите задачу...'}
-              AutoCorrect={false}
-              autoCapitalize='sentences'
-              autoFocus={true}
-              blurOnSubmit={false}
-              keyboardType='default'
-              clearButtonMode='always'
-              onSubmitEditing={(evt) => {
-                  // console.log(evt.nativeEvent.text.trim());
-                  setValue(evt.nativeEvent.text.trim());
-                  pressHandler();
-              }}
-          />
-          <TouchableHighlight
-              style={styles.btn}
-              onPress={pressHandler}
-              activeOpacity={0.6}
-              underlayColor="rgb(12, 43, 94)"
-          >
-              <Text style={styles.btnText}>{btnTitle??'Добавить'}</Text>
-          </TouchableHighlight>
-      </View>
-  )
+        <View style={styles.addBlock}>
+            <TextInput
+                style={styles.input}
+                onChangeText={value => setValue(value)}
+                value={value}
+                placeholder={inputPlaceholder ?? 'Введите задачу...'}
+                AutoCorrect={false}
+                autoCapitalize='sentences'
+                autoFocus={false}
+                blurOnSubmit={false}
+                keyboardType='default'
+                clearButtonMode='always'
+                onSubmitEditing={(evt) => {
+                    // console.log(evt.nativeEvent.text.trim());
+                    setValue(evt.nativeEvent.text.trim());
+                    pressHandler(Platform.OS === "ios");
+                }}
+            />
+            {/*<AntDesign.Button onPress={pressHandler}*/}
+            {/*                  onLongPress={() => onOpenForm(value, '')}*/}
+            {/*                  name="pluscircleo"*/}
+            {/*                  color={THEME.BUTTON_DEFAULT_COLOR}*/}
+            {/*                  style={styles.btn}*/}
+            {/*>*/}
+            {/*    {btnTitle??"Добавить"}*/}
+            {/*</AntDesign.Button>*/}
+            <AppButton onPress={() => pressHandler(true)}
+                       onLongPress={() => onOpenForm(value, '')}
+                       style={styles.btn}
+            >
+                <AntDesign name="pluscircleo" size={20} style={{paddingEnd: 5}}/>
+                {/*{btnTitle}*/}
+            </AppButton>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -54,21 +67,16 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 44,
-        width: '70%',
+        width: '80%',
         borderStyle: 'solid',
-        borderColor: 'gray',
+        borderColor: THEME.TODO_BCOLOR,
         borderRadius: 10,
         borderWidth: 2,
         padding: 10
     },
     btn: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
-        borderRadius: 10,
-        backgroundColor: 'rgb(32, 63, 114)',
-    },
-    btnText: {
-        color: 'white'
+        paddingVertical: 12,
+        paddingHorizontal: 15,
+        borderRadius: 10
     }
 })
