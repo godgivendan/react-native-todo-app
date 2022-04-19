@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {StyleSheet, View, Dimensions} from "react-native";
 import {THEME} from "../theme"
 import {AppCard} from "../components/ui/AppCard";
@@ -7,11 +7,17 @@ import {AppTextBold} from "../components/ui/AppTextBold";
 import {AppText} from "../components/ui/AppText";
 import {AppButton} from "../components/ui/AppButton";
 import {AntDesign, FontAwesome} from "@expo/vector-icons";
+import {TodoContext} from "../context/todo/todoContext";
+import {ScreenContext} from "../context/screen/screenContext";
 
-export const TodoScreen = ({todo, goBack, onRemove, onSave}) => {
+export const TodoScreen = () => {
+    const {todos, updateTodo, removeTodo} = useContext(TodoContext);
+    const {todoId, changeScreen} = useContext(ScreenContext)
     const [modal, setModal] = useState(false);
+    const  todo = todos.find(t => t.id = todoId);
+
     const saveHandler = (title, description) => {
-        onSave(todo.id, title, description);
+        updateTodo(todo.id, title, description);
         setModal(false);
     }
     return (
@@ -32,7 +38,7 @@ export const TodoScreen = ({todo, goBack, onRemove, onSave}) => {
                 <View style={styles.button}>
                     <AppButton bgColor={THEME.BUTTON_GRAY_BGCOLOR}
                                сolor={THEME.BUTTON_GRAY_COLOR}
-                               onPress={goBack}
+                               onPress={() => changeScreen(null)}
                     >
                         <AntDesign name="back" size={16} />
                         {" "+"Назад"}
@@ -41,7 +47,7 @@ export const TodoScreen = ({todo, goBack, onRemove, onSave}) => {
                 <View style={styles.button}>
                     <AppButton bgColor={THEME.BUTTON_DANGER_BGCOLOR}
                                color={THEME.BUTTON_DANGER_COLOR}
-                               onPress={() => onRemove(todo.id)}
+                               onPress={() => removeTodo(todo.id)}
                     >
                         <AntDesign name="delete" size={16} />
                         {" "+"Удалить"}

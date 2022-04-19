@@ -20,6 +20,12 @@ export const EditModal = ({value, description, visible, onCancel, onSave, wndTit
         }
     }
 
+    const cancelHandler = () => {
+        setTitle(value)
+        setDesc(description)
+        onCancel(false)
+    }
+
     return (
         <Modal visible={visible}
                animationType='slide'
@@ -43,7 +49,7 @@ export const EditModal = ({value, description, visible, onCancel, onSave, wndTit
                 <View style={styles.btnBar}>
                     <AppButton bgColor={THEME.BUTTON_GRAY_BGCOLOR}
                                color={THEME.BUTTON_GRAY_COLOR}
-                               onPress={() => onCancel(false)}
+                               onPress={cancelHandler}
                     >
                         <FontAwesome name="remove" size={16}/>
                         {' ' + 'Отменить'}

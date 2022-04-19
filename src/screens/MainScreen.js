@@ -1,12 +1,17 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {StyleSheet, View, FlatList, Image, Dimensions} from "react-native";
 import {AddTodo} from "../components/AddTodo";
 import {EditModal} from "../components/EditModal";
 import {Todo} from "../components/Todo";
 import {AppText} from "../components/ui/AppText";
 import {THEME} from "../theme";
+import {TodoContext} from "../context/todo/todoContext";
+import {ScreenContext} from "../context/screen/screenContext";
 
-export const MainScreen = ({todos, addTodo, removeTodo, openTodo}) => {
+export const MainScreen = () => {
+    const {todos, addTodo, removeTodo} = useContext(TodoContext)
+    const {changeScreen} = useContext(ScreenContext)
+
     const [tempTitle, setTempTitle] = useState('');
     const [tempDesc, setTempDesc] = useState('');
     const [modal, setModal] = useState(false);
@@ -29,7 +34,7 @@ export const MainScreen = ({todos, addTodo, removeTodo, openTodo}) => {
             <FlatList
                 keyExtractor={item => item.id.toString()}
                 data={todos}
-                renderItem={({item}) => <Todo todo={item} onRemove={removeTodo} onOpen={openTodo}/>}
+                renderItem={({item}) => <Todo todo={item} onRemove={removeTodo} onOpen={changeScreen}/>}
                 style={styles.todoList}
             />
         </View>
