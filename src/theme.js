@@ -1,6 +1,8 @@
 export const THEME = {
     MAIN_BGCOLOR: 'rgb(49, 89, 150)',
     MAIN_COLOR: 'white',
+    DANGER_COLOR: 'red',
+    DARK_DANGER_COLOR: 'darkred',
     PADDING_HORIZONTAL: 30,
 
     TODO_BGCOLOR: 'white',

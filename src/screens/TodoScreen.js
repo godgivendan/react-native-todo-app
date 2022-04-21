@@ -14,10 +14,10 @@ export const TodoScreen = () => {
     const {todos, updateTodo, removeTodo} = useContext(TodoContext);
     const {todoId, changeScreen} = useContext(ScreenContext)
     const [modal, setModal] = useState(false);
-    const  todo = todos.find(t => t.id = todoId);
+    const todo = todos.find(t => t.id === todoId);
 
-    const saveHandler = (title, description) => {
-        updateTodo(todo.id, title, description);
+    const saveHandler = async (title, description) => {
+        await updateTodo(todo.id, title, description);
         setModal(false);
     }
     return (

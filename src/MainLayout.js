@@ -30,8 +30,9 @@ const styles = StyleSheet.create({
         // justifyContent: 'center'
     },
     content: {
-        height: '80%',
+        flex: 1,
         paddingHorizontal: THEME.PADDING_HORIZONTAL,
-        paddingVertical: 20
+        paddingTop: 20,
+        paddingBottom: 155
     }
 });
